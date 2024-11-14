@@ -92,6 +92,29 @@ To run the application locally using Docker Compose:
    ```
 3. Access the voting app in your browser at `http://localhost:8000`.
 
+   #### Here are the screen shots of the verification and valition of the build images, running container and accessing the app
+
+   -> showing the images are created and running
+   ![image](https://github.com/user-attachments/assets/83e0127d-a8ab-4f05-ab3b-8cf5e1246095)
+
+   -> Showing the containers are running in docker desktop
+   ![image](https://github.com/user-attachments/assets/d3d2ecb1-3abe-4943-9d98-1eb40dd071d8)
+
+   -> Redis is up and running
+   ![image](https://github.com/user-attachments/assets/4591814a-b3f5-40c8-93ed-038f38b69698)
+
+   -> voting-app-front is listening at local:8000 port
+
+   ![image](https://github.com/user-attachments/assets/17131d1c-3931-4cfa-bf10-1215c0fa413f)
+
+   -> Access the service at local:8000 and accessed
+   ![image](https://github.com/user-attachments/assets/589cd44a-8949-4910-8392-870996d4c01e)
+
+
+
+
+
+
 ## Suggested Improvements:- 
 
 - **Git Branch stratagies** -  Instead of deploying main, will suggest to deploy from feature branch to check any issues.
