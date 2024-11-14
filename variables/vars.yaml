@@ -1,0 +1,18 @@
+# General variables
+acrName: "cr-lbg-voteapp-test-uks"
+acrLoginServer: "$(acrName).azurecr.io"
+repositoryName: "Azure-Voting-App-Redis"
+manifestFileName: "azure-vote-all-in-one-redis.yaml"
+vmImageName: "ubuntu-latest"
+azureSubscription: "votingAzureSubscription"  # Replace with the exact name of your Azure Service Connection
+serviceACRConnection: "votingACRConnection"
+appRepoName: "azure-vote-front"
+redisRepoName: "azure-vote-back"
+
+# Artifact settings
+artifactName: "manifests"
+
+# Deployment settings
+resourceGroup: "rg-lbg-voteapp-test-uks"        
+clusterName: "voting-aks-cluster"             
+namespace: "voting-app-ns"

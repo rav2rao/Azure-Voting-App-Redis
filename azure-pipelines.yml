@@ -1,0 +1,35 @@
+# File: azure-pipelines.yml 
+name: $(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+    - main
+    - develop
+  paths:
+    exclude:
+    - '**.md'
+    - 'docs/**'
+
+# pr:
+#   branches:
+#     include:
+#     - main
+#     - develop
+#   paths:
+#     exclude:
+#     - '**.md'
+#     - 'docs/**
+
+resources:
+  repositories:
+    - repository: self
+      type: git
+      name: voting-redis-app
+
+variables:
+  - template: variables/vars.yml  
+
+stages:
+  - template: stages/ci.yml       # template reference for build & push to ACR stage
+  - template: stages/cd.yml       # template reference to deploy to AKS

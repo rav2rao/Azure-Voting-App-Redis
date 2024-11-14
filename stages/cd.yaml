@@ -1,0 +1,50 @@
+trigger: none  # Trigger manually or through a release pipeline
+
+variables:
+  - template: variables.yaml  # Importing variables from variables.yaml
+
+stages:
+- stage: DeployToAKS
+  displayName: "Deploy to AKS"
+  jobs:
+    - job: DeployJob
+      displayName: "Deploy Application to AKS"
+      pool:
+        vmImage: "$(vmImageName)"
+
+      steps:
+      - download: current
+        artifact: $(artifactName)
+        displayName: "Download Build Artifacts"
+
+      - task: AzureCLI@2
+        displayName: "Login to Azure and Set up AKS Credentials"
+        inputs:
+          azureSubscription: "$(azureSubscription)"
+          scriptType: "bash"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            az aks get-credentials --resource-group $(resourceGroup) --name $(clusterName) --overwrite-existing
+
+      # Create the imagePullSecret in the target namespace
+      - task: KubernetesManifest@0
+        displayName: "Create imagePullSecret for ACR"
+        inputs:
+          action: createSecret
+          namespace: "$(namespace)"
+          secretType: dockerRegistry
+          secretName: "acr-image-pull-secret"
+          dockerRegistryEndpoint: "$(acrName)"  # Service Connection to ACR
+
+      # Deploy the Kubernetes manifest, overriding the image and imagePullSecrets
+      - task: KubernetesManifest@0
+        displayName: Deploy Multi-Container Application (App + Redis) with imagePullSecrets"
+        inputs:
+          action: deploy
+          namespace: "$(namespace)"
+          manifests: "$(Pipeline.Workspace)/$(artifactName)/$(manifestName).yaml"
+          containers: |
+            $(acrLoginServer)/$(appRepoName):$(Build.BuildId)
+            $(acrLoginServer)/$(redisRepoName):$(Build.BuildId)
+          imagePullSecrets: |
+            acr-image-pull-secret
